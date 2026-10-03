@@ -44,10 +44,35 @@ Analysis code for the genus-wide *Medicago* super-pangenome study, covering geno
 |  | [TE_subtype_soloLTR](07_TE_evolution/TE_subtype_soloLTR) | TE subtype statistics, solo-LTR/intact-LTR ratios and insertion-time plots |
 | Structural variation | [panSV](08_structural_variation/panSV) | SV calling and pan-SV construction: dual-reference HiFi read-based calling (Snakemake + Jasmine + Sniffles2 genotyping), SVGAP assembly-based calling, integration and QC, SV feature/TE/expression analyses |
 
+Each module directory contains a `README.md` listing its scripts with short descriptions.
+
+## Usage
+
+Scripts take their inputs as command-line arguments; most of them print a usage line when run without arguments.
+
+Scripts in `my_run/` directories are of three kinds:
+
+1. **Command generators** print the commands to run instead of executing them. Redirect the output to a shell script and run it:
+   ```bash
+   python my_run/s1.run_busco_assembly.py genome assembly.fa > s1.sh
+   bash s1.sh
+   ```
+2. **Command-file writers** write `.sh` command files themselves (e.g. `s2.run_iqtree.py`), which are then run with `bash`.
+3. **Processing scripts** parse, filter, summarize or plot results directly (e.g. `h2.statistic_interproscan_anno.py`).
+
+Numeric prefixes give the order of steps within a module:
+
+| Prefix | Meaning |
+|---|---|
+| `s1`, `s2`, … | Main pipeline steps |
+| `h1`, `h2`, … | Helper scripts (format conversion, ID handling, sequence extraction) |
+| `p1`, `p2`, … | Downstream processing and plotting steps |
+| `a1`, `b1`, `d1`, … | Steps of a sub-workflow within the module |
+
+Other code is organized in `scripts/` or numbered sub-directories (e.g. `01_.../`, `02_.../`), usually with `run_*.sh` driver scripts that call the Python/R scripts in order.
+
 ## Notes
 
-- Each module directory contains a `README.md` listing its scripts with short descriptions.
-- In modules with a `my_run/` directory, most Python scripts print the commands to run rather than executing them, e.g. `python my_run/s1.xxx.py <args> > run.sh && bash run.sh`. Script prefixes: `s` = main pipeline step, `h` = helper, `p` = statistics/plotting.
 - Absolute paths have been replaced with placeholders: `path/to/project` (project directory), `path/to/home` (software and conda environments), `path/to/data` and `path/to/software`. Adjust them to your local paths before use.
 - Some code comments are in Chinese.
 - This repository contains code only; no data or results are included.

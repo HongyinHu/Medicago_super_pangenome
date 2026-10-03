@@ -1,0 +1,102 @@
+configfile: "config/config.yaml"
+
+rule all:
+    input:
+        "results/event_level/event_level.candidates.tsv",
+        "results/gene_interval/gene_interval.sample_states.tsv",
+        "results/gene_interval/gene_interval.candidates.tsv",
+        "results/qc/flank_coverage_qc.tsv",
+        "results/candidates/combined_ranked_candidates.tsv",
+        "results/igv/igv_report_manifest.tsv",
+        "docs/phenotype_cosegregation_workflow.pdf"
+
+rule score_event_level:
+    input:
+        phenotype=config["phenotype_table"],
+        pav=config["pav_matrix"]
+    output:
+        "results/event_level/event_level.candidates.tsv"
+    shell:
+        "python scripts/score_pav_cosegregation.py "
+        "--phenotype {input.phenotype} "
+        "--pav {input.pav} "
+        "--positive {config[phenotype_positive]} "
+        "--negative {config[phenotype_negative]} "
+        "--min-match {config[min_group_match_rate]} "
+        "--out {output}"
+
+rule score_gene_interval:
+    input:
+        phenotype=config["phenotype_table"],
+        targets=config["target_intervals"],
+        manifest=config["vcf_manifest"]
+    output:
+        states="results/gene_interval/gene_interval.sample_states.tsv",
+        candidates="results/gene_interval/gene_interval.candidates.tsv"
+    shell:
+        "python scripts/score_gene_interval_events.py "
+        "--phenotype {input.phenotype} "
+        "--targets {input.targets} "
+        "--vcf-manifest {input.manifest} "
+        "--positive {config[phenotype_positive]} "
+        "--negative {config[phenotype_negative]} "
+        "--min-callers {config[min_callers_gene_interval]} "
+        "--min-svlen {config[min_svlen]} "
+        "--small-indel-max-len {config[small_indel_max_len]} "
+        "--min-overlap-fraction {config[min_overlap_fraction]} "
+        "--min-match {config[min_group_match_rate]} "
+        "--states-out {output.states} "
+        "--candidates-out {output.candidates}"
+
+rule flank_coverage_qc:
+    input:
+        states="results/gene_interval/gene_interval.sample_states.tsv",
+        targets=config["target_intervals"],
+        bam_manifest=config["bam_manifest"]
+    output:
+        "results/qc/flank_coverage_qc.tsv"
+    shell:
+        "python scripts/flank_coverage_qc.py "
+        "--states {input.states} "
+        "--targets {input.targets} "
+        "--bam-manifest {input.bam_manifest} "
+        "--samtools {config[samtools]} "
+        "--flank-size {config[flank_size]} "
+        "--min-flank-depth {config[min_flank_depth]} "
+        "--max-event-to-flank-depth-ratio-for-del {config[max_event_to_flank_depth_ratio_for_del]} "
+        "--out {output}"
+
+rule rank_candidates:
+    input:
+        event_level="results/event_level/event_level.candidates.tsv",
+        gene_interval="results/gene_interval/gene_interval.candidates.tsv",
+        qc="results/qc/flank_coverage_qc.tsv"
+    output:
+        "results/candidates/combined_ranked_candidates.tsv"
+    shell:
+        "python scripts/rank_candidates.py "
+        "--event-level {input.event_level} "
+        "--gene-interval {input.gene_interval} "
+        "--qc {input.qc} "
+        "--out {output}"
+
+rule make_igv_manifest:
+    input:
+        candidates="results/candidates/combined_ranked_candidates.tsv",
+        targets=config["target_intervals"],
+        bam_manifest=config["bam_manifest"]
+    output:
+        "results/igv/igv_report_manifest.tsv"
+    shell:
+        "python scripts/make_igv_manifest.py "
+        "--candidates {input.candidates} "
+        "--targets {input.targets} "
+        "--bam-manifest {input.bam_manifest} "
+        "--padding {config[igv_window_padding]} "
+        "--out {output}"
+
+rule draw_workflow_figure:
+    output:
+        "docs/phenotype_cosegregation_workflow.pdf"
+    shell:
+        "python scripts/draw_workflow_figure.py --out {output}"

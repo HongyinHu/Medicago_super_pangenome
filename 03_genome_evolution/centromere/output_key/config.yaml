@@ -1,0 +1,40 @@
+{
+  "project_root": "path/to/project/10.centromere_analysis",
+  "run_root": "path/to/project/10.centromere_analysis/output_key",
+  "reference_species": ["genome_R108", "genome_A17"],
+  "validation_species": ["genome_Msa", "genome_474"],
+  "target_species": "genome_Mpo",
+  "flank_bp": 3000000,
+  "anchors_per_side": 12,
+  "species": {
+    "genome_R108": {
+      "cen_bed": "output_all/04_cenh3_signal/genome_R108.functional_centromere/genome_R108.CENH3.functional_centromere.final.bed",
+      "gene_coord": "output_synthen/01_JCVI/R108_Mpo_synteny_lz10_run/genome_R108.gene.coord.tsv"
+    },
+    "genome_A17": {
+      "cen_bed": "output_all/04_cenh3_signal/genome_A17.functional_centromere/genome_A17.CENH3.functional_centromere.final.bed",
+      "gene_coord": "output_synthen/01_JCVI/genome_A17_genome_R108/genome_A17.gene.coord.tsv"
+    },
+    "genome_Mpo": {
+      "cen_bed": "output_synthen/01_JCVI/R108_Mpo_synteny_lz10_run/genome_Mpo.cen_core.bed",
+      "gene_coord": "output_synthen/01_JCVI/R108_Mpo_synteny_lz10_run/genome_Mpo.gene.coord.tsv"
+    },
+    "genome_Msa": {
+      "cen_bed": "output_all/04_cenh3_signal/genome_Msa.functional_centromere/genome_Msa.CENH3.functional_centromere.final.bed",
+      "gene_coord": "output_synthen/01_JCVI/R108_Msa_synteny_lz10_run/genome_Msa.gene.coord.tsv"
+    },
+    "genome_474": {
+      "cen_bed": "output_synthen/01_JCVI/genome_R108_genome_474_synteny_lz10_run/genome_474.cen_core.bed",
+      "gene_coord": "output_synthen/01_JCVI/genome_R108_genome_474_synteny_lz10_run/genome_474.gene.coord.tsv"
+    }
+  },
+  "links": {
+    "R108_to_Mpo": "output_synthen/01_JCVI/R108_Mpo_synteny_lz10_run/genome_R108.genome_Mpo.gene_links.tsv",
+    "A17_to_R108": "output_synthen/01_JCVI/genome_A17_genome_R108/genome_A17.genome_R108.gene_links.tsv",
+    "Msa_to_Mpo": "output_synthen/01_JCVI/genome_Msa_genome_Mpo_synteny_lz10_run/genome_Msa.genome_Mpo.gene_links.tsv"
+  },
+  "sequence_blocks": {
+    "R108_to_Mpo": "output_synthen/02_cent_synteny/genome_R108_genome_Mpo/genome_R108_vs_genome_Mpo.rawPAF.blocks.tsv",
+    "Msa_to_Mpo": "output_synthen/02_cent_synteny/genome_Msa_genome_Mpo/genome_Msa_vs_genome_Mpo.rawPAF.blocks.tsv"
+  }
+}

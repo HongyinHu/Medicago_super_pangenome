@@ -1,0 +1,32 @@
+run_dir: path/to/project/N_3.call_SV/01.read_based_dualref_hifi
+species_list: config/species.list
+species_metadata: config/species.tsv
+refs_tsv: config/refs.tsv
+
+min_svlen: 50
+svtypes: [DEL, INS, DUP, INV]
+
+within_species_merge_distance: 500
+caller_min_support_within_species: 2
+
+across_species_merge_distance: 1000
+panSV_min_support_across_species: 1
+
+genotype_threads: 4
+genotype_jobs: 1
+filter_jobs: 12
+consensus_jobs: 8
+align_threads: 32
+
+phenotype_column: phenotype
+phenotype_case: prickly
+phenotype_control: nonprickly
+fdr_cutoff: 0.05
+
+tools:
+  survivor: path/to/home/sofeware/SURVIVOR/Debug/SURVIVOR
+  sniffles2: path/to/home/anaconda3/envs/sniffles_env/bin/sniffles
+  minimap2: path/to/home/anaconda3/envs/minimap2_env/bin/minimap2
+  python: path/to/home/anaconda3/envs/biosofeware/bin/python
+  bgzip: path/to/home/anaconda3/envs/biosofeware/bin/bgzip
+  tabix: path/to/home/anaconda3/envs/biosofeware/bin/tabix

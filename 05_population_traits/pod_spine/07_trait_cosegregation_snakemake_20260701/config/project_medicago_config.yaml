@@ -1,0 +1,29 @@
+# Project-specific configuration for the Medicago pod spine analysis.
+# This file keeps the public template config/config.yaml unchanged.
+
+phenotype_table: "config/phenotype.tsv"
+vcf_manifest: "config/project_medicago_vcf_manifest.tsv"
+bam_manifest: "config/project_medicago_bam_manifest.tsv"
+target_intervals: "config/target_intervals.tsv"
+pav_matrix: "config/pav_matrix.tsv"
+
+min_group_match_rate: 0.80
+min_callers_gene_interval: 2
+min_svlen: 150
+small_indel_max_len: 120
+min_overlap_fraction: 0.30
+
+flank_size: 1000
+min_flank_depth: 5
+max_event_to_flank_depth_ratio_for_del: 0.55
+
+svtypes:
+  - DEL
+  - INS
+  - DUP
+  - INV
+
+phenotype_positive: "spiny"
+phenotype_negative: "spineless"
+igv_window_padding: 2000
+samtools: "samtools"

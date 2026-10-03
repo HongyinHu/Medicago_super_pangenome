@@ -1,0 +1,11 @@
+name: trait-sv-cosegregation
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.9
+  - snakemake>=7
+  - samtools
+  - bcftools
+  - tabix
+  - reportlab

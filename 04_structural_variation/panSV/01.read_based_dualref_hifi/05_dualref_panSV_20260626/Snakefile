@@ -1,0 +1,25 @@
+configfile: "config/config.yaml"
+
+# Documentation Snakefile for the reproducible workflow. The submitted Slurm job
+# executes scripts/run_dualref_panSV.sh because the target server already has the
+# required tools as absolute paths and this avoids relying on a cluster profile.
+
+species = [x.strip() for x in open("config/species.list") if x.strip()]
+refs = []
+with open("config/refs.tsv") as fh:
+    next(fh)
+    for line in fh:
+        refs.append(line.strip().split("\t")[0])
+
+rule all:
+    input:
+        expand("results/{ref}/panSV/panSV.{ref}.genotyped.18species.vcf.gz", ref=refs),
+        expand("results/{ref}/panSV/panSV.{ref}.PAV.matrix.tsv", ref=refs),
+        "results/meta-panSV/meta-panSV.events.tsv",
+        "results/meta-panSV/meta-panSV.matching.evidence.tsv"
+
+rule run_dualref_pipeline:
+    output:
+        "summary/dualref_panSV.done"
+    shell:
+        "bash scripts/run_dualref_panSV.sh"

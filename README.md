@@ -74,5 +74,4 @@ Other code is organized in `scripts/` or numbered sub-directories (e.g. `01_.../
 ## Notes
 
 - Absolute paths have been replaced with placeholders: `path/to/project` (project directory), `path/to/home` (software and conda environments), `path/to/data` and `path/to/software`. Adjust them to your local paths before use.
-- Some code comments are in Chinese.
 - This repository contains code only; no data or results are included.
